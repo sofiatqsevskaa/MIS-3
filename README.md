@@ -2,4 +2,3 @@
 ![Alt text](./Screenshot%20from%202025-11-25%2020-06-37.png)
 ![Alt text](./Screenshot%20from%202025-11-25%2020-07-12.png)
 ![Alt text](./Screenshot%20from%202025-11-25%2020-07-28.png)
-[Screencast](./screencast.webm)

@@ -1,3 +1,10 @@
+![Alt text](./favorites.png)
+![Alt text](./favorites2.png)
+![Alt text](./favorites3.png)
+![Alt text](./favorites4.png)
+![Alt text](./notification.png)
+![Alt text](./notification_open.png)
+
 ![Alt text](./Screenshot%20from%202025-11-25%2020-06-37.png)
 ![Alt text](./Screenshot%20from%202025-11-25%2020-06-17.png)
 ![Alt text](./Screenshot%20from%202025-11-25%2020-07-12.png)

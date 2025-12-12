@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../model/meal_summary.dart';
 import '../service/api_service.dart';
+import '../service/favorites_service.dart';
 import '../widgets/meal_card.dart';
-import 'meal_detail_screen.dart';
+import 'favorites_screen.dart';
 
 class CategoryScreen extends StatefulWidget {
   final String category;
@@ -45,15 +47,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
     });
   }
 
-  void _openMeal(String id) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => MealDetailScreen(mealId: id)),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final favoritesService = context.watch<FavoritesService>();
+
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
@@ -64,6 +61,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black87,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.favorite),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => FavoritesScreen()),
+              );
+            },
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Container(color: Colors.grey[200], height: 1),
@@ -73,7 +81,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
-                // Search bar with better styling
                 Container(
                   color: Colors.white,
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
@@ -96,7 +103,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     ),
                   ),
                 ),
-                // Results count
                 if (!loading)
                   Container(
                     width: double.infinity,
@@ -108,7 +114,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     ),
                   ),
                 const SizedBox(height: 8),
-                // Grid with 4 columns
                 Expanded(
                   child: filtered.isEmpty
                       ? Center(
@@ -150,7 +155,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 mainAxisSpacing: 10,
                               ),
                           itemCount: filtered.length,
-                          itemBuilder: (_, i) => MealCard(meal: filtered[i]),
+                          itemBuilder: (_, i) => MealCard(
+                            meal: filtered[i],
+                            isFavorite: favoritesService.isFavorite(
+                              filtered[i].id,
+                            ),
+                            onFavoriteToggle: (_) =>
+                                favoritesService.toggleFavorite(filtered[i]),
+                          ),
                         ),
                 ),
               ],

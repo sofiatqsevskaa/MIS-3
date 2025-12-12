@@ -4,8 +4,15 @@ import '../view/meal_detail_screen.dart';
 
 class MealCard extends StatelessWidget {
   final MealSummary meal;
+  final bool isFavorite;
+  final void Function(bool)? onFavoriteToggle;
 
-  const MealCard({required this.meal, Key? key}) : super(key: key);
+  const MealCard({
+    required this.meal,
+    this.isFavorite = false,
+    this.onFavoriteToggle,
+    Key? key,
+  }) : super(key: key);
 
   void _openMealDetail(BuildContext context) {
     Navigator.push(
@@ -35,25 +42,49 @@ class MealCard extends StatelessWidget {
           children: [
             Expanded(
               flex: 3,
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                child: Image.network(
-                  meal.thumb,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                      Center(child: Icon(Icons.broken_image)),
-                  loadingBuilder: (context, child, progress) {
-                    if (progress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: progress.expectedTotalBytes != null
-                            ? progress.cumulativeBytesLoaded /
-                                  (progress.expectedTotalBytes ?? 1)
-                            : null,
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
+                    child: Image.network(
+                      meal.thumb,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Center(child: Icon(Icons.broken_image)),
+                      loadingBuilder: (context, child, progress) {
+                        if (progress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: progress.expectedTotalBytes != null
+                                ? progress.cumulativeBytesLoaded /
+                                      (progress.expectedTotalBytes ?? 1)
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: GestureDetector(
+                      onTap: () => onFavoriteToggle?.call(!isFavorite),
+                      child: Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.white70,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: Colors.red,
+                        ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(

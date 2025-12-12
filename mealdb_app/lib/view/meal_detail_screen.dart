@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../service/api_service.dart';
 import '../model/meal_details.dart';
+import 'favorites_screen.dart';
 
 class MealDetailScreen extends StatefulWidget {
   final String mealId;
@@ -89,6 +90,17 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
             backgroundColor: Colors.white,
             foregroundColor: Colors.black87,
             elevation: 0,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.favorite),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => FavoritesScreen()),
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               background: CachedNetworkImage(
                 imageUrl: meal!.thumb,
@@ -120,7 +132,6 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        // YouTube button
                         if (meal!.youtube.isNotEmpty)
                           SizedBox(
                             width: double.infinity,
